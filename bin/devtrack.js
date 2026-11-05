@@ -1,3 +1,5 @@
 #!/usr/bin/env node
 
-console.log("Welcome to DevTrack CLI!");
+import { runCLI } from '../src/cli.js';
+
+runCLI();
