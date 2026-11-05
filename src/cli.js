@@ -1,4 +1,3 @@
-
 import { parseArgs } from 'node:util';
 
 import {
@@ -7,6 +6,13 @@ import {
     showProject,
     removeProject,
 } from './commands/project.js';
+
+import {
+    addTask,
+    listTasks,
+    completeTask,
+    deleteTask,
+} from './commands/task.js';
 
 import { inspectRepository } from './commands/repo.js';
 
@@ -67,6 +73,33 @@ export async function runCLI() {
         }
     }
 
+    // Task management commands
+    if (command === 'task') {
+        switch (action) {
+            case 'add':
+                await addTask(argument);
+                return;
+
+            case 'list':
+                await listTasks();
+                return;
+
+            case 'complete':
+                await completeTask(argument);
+                return;
+
+            case 'delete':
+                await deleteTask(argument);
+                return;
+
+            default:
+                console.error('Error: Unknown task action.');
+                console.log('Available actions: add, list, complete, delete');
+                process.exitCode = 1;
+                return;
+        }
+    }
+
     // GitHub repository commands
     if (command === 'repo') {
         if (action === 'inspect') {
@@ -81,7 +114,7 @@ export async function runCLI() {
     }
 
     // Commands that will be implemented later
-    const upcomingCommands = ['task', 'dashboard', 'report'];
+    const upcomingCommands = ['dashboard', 'report'];
 
     if (upcomingCommands.includes(command)) {
         console.log(`The "${command}" command is not implemented yet.`);
@@ -118,6 +151,12 @@ Examples:
   devtrack project list
   devtrack project show "BookNest"
   devtrack project remove "BookNest"
+
+  devtrack task add "Build login page"
+  devtrack task list
+  devtrack task complete 1
+  devtrack task delete 1
+
   devtrack repo inspect facebook/react
 `);
 }
