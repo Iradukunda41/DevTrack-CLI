@@ -47,3 +47,63 @@ export async function listProjects() {
         console.log(`${index + 1}. ${project.name}`);
     });
 }
+
+
+
+export async function showProject(name) {
+    if (!name) {
+        console.error('Error: Please provide a project name.');
+        process.exitCode = 1;
+        return;
+    }
+
+    const data = await readData();
+
+    const project = data.projects.find(
+        project => project.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (!project) {
+        console.error(`Error: Project "${name}" was not found.`);
+        process.exitCode = 1;
+        return;
+    }
+
+    console.log('\nProject Details\n');
+    console.log(`Name: ${project.name}`);
+    console.log(`ID: ${project.id}`);
+    console.log(
+        `Created: ${project.createdAt
+            ? new Date(project.createdAt).toLocaleString()
+            : 'Not available'}`
+    );
+}
+
+
+export async function removeProject(name) {
+    if (!name) {
+        console.error('Error: Please provide a project name.');
+        process.exitCode = 1;
+        return;
+    }
+
+    const data = await readData();
+
+    const projectIndex = data.projects.findIndex(
+        project => project.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (projectIndex === -1) {
+        console.error(`Error: Project "${name}" was not found.`);
+        process.exitCode = 1;
+        return;
+    }
+
+    const removedProject = data.projects[projectIndex];
+
+    data.projects.splice(projectIndex, 1);
+
+    await writeData(data);
+
+    console.log(`Project "${removedProject.name}" removed successfully!`);
+}

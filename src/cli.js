@@ -1,6 +1,6 @@
 
 import { parseArgs } from 'node:util';
-import { addProject, listProjects } from './commands/project.js';
+import { addProject, listProjects, showProject, removeProject, } from './commands/project.js';
 import { inspectRepository } from './commands/repo.js';
 
 export async function runCLI() {
@@ -22,30 +22,41 @@ export async function runCLI() {
     }
 
     const command = positionals[0];
+    const action = positionals[1];
+    const argument = positionals.slice(2).join(' ');
 
-    const validCommands = [
-        'project',
-        'task',
-        'repo',
-        'dashboard',
-        'report',
-    ];
-
+    // Check whether a command was provided
     if (!command) {
         showHelp();
         return;
     }
 
-    if (!validCommands.includes(command)) {
-        console.error(`Error: Unknown command "${command}".`);
-        console.log('Run "devtrack --help" to see available commands.');
+    // Handle project commands
+    if (command === 'project') {
+        if (action === 'remove') {
+            await removeProject(argument);
+            return;
+        }
+        if (action === 'add') {
+            await addProject(argument);
+            return;
+        }
+
+        if (action === 'list') {
+            await listProjects();
+            return;
+        }
+
+        if (action === 'show') {
+            await showProject(argument);
+            return;
+        }
+
+        console.error('Error: Unknown project action.');
+        console.log('Available actions: add, list, show, remove');
         process.exitCode = 1;
         return;
     }
-
-    const action = positionals[1];
-    const argument = positionals.slice(2).join(' ');
-
 
     // Handle GitHub repository commands
     if (command === 'repo') {
@@ -54,22 +65,28 @@ export async function runCLI() {
             return;
         }
 
-        console.error('Unknown repository action.');
+        console.error('Error: Unknown repository action.');
         console.log('Available actions: inspect');
         process.exitCode = 1;
         return;
     }
 
+    // Handle commands not implemented yet
+    const validCommands = [
+        'task',
+        'dashboard',
+        'report',
+    ];
 
-    if (action === 'list') {
-        await listProjects();
+    if (validCommands.includes(command)) {
+        console.log(`The "${command}" command is not implemented yet.`);
         return;
     }
 
-    console.error('Unknown project action.');
-    console.log('Available actions: add, list');
+    // Handle unknown commands
+    console.error(`Error: Unknown command "${command}".`);
+    console.log('Run "devtrack --help" to see available commands.');
     process.exitCode = 1;
-    return;
 }
 
 function showHelp() {
@@ -92,7 +109,8 @@ Options:
 
 Examples:
   devtrack project add "BookNest"
-  devtrack task list
+  devtrack project list
+  devtrack project show "BookNest"
   devtrack repo inspect facebook/react
 `);
 }
