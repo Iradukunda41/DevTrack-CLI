@@ -15,6 +15,8 @@ import {
 } from './commands/task.js';
 
 import { inspectRepository } from './commands/repo.js';
+import { showDashboard } from './commands/dashboard.js';
+import { showReport } from './commands/report.js';
 
 // Main function that runs the CLI
 export async function runCLI() {
@@ -113,11 +115,14 @@ export async function runCLI() {
         return;
     }
 
-    // Commands that will be implemented later
-    const upcomingCommands = ['dashboard', 'report'];
+    // Dashboard and report commands
+    if (command === 'dashboard') {
+        await showDashboard();
+        return;
+    }
 
-    if (upcomingCommands.includes(command)) {
-        console.log(`The "${command}" command is not implemented yet.`);
+    if (command === 'report') {
+        await showReport();
         return;
     }
 
@@ -158,5 +163,8 @@ Examples:
   devtrack task delete 1
 
   devtrack repo inspect facebook/react
+
+  devtrack dashboard
+  devtrack report
 `);
 }
