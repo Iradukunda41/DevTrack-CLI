@@ -1,0 +1,35 @@
+{
+  "name": "devtrack-cli",
+  "version": "1.0.0",
+  "description": "A Node.js CLI toolkit for managing developer projects, tasks, and GitHub repository insights.",
+  "type": "module",
+  "main": "bin/devtrack.js",
+  "bin": {
+    "devtrack": "./bin/devtrack.js"
+  },
+  "scripts": {
+    "start": "node bin/devtrack.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "keywords": [
+    "nodejs",
+    "cli",
+    "developer-tools",
+    "project-management",
+    "task-management",
+    "github"
+  ],
+  "author": "DevTrack Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marquise-ange/DevTrack-CLI.git"
+  },
+  "bugs": {
+    "url": "https://github.com/marquise-ange/DevTrack-CLI/issues"
+  },
+  "homepage": "https://github.com/marquise-ange/DevTrack-CLI#readme"
+}
