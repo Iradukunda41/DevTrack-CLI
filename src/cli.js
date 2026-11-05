@@ -1,7 +1,8 @@
 
 import { parseArgs } from 'node:util';
+import { addProject, listProjects } from './commands/project.js';
 
-export function runCLI() {
+export async function runCLI() {
     const { values, positionals } = parseArgs({
         options: {
             help: {
@@ -37,6 +38,27 @@ export function runCLI() {
     if (!validCommands.includes(command)) {
         console.error(`Error: Unknown command "${command}".`);
         console.log('Run "devtrack --help" to see available commands.');
+        process.exitCode = 1;
+        return;
+    }
+
+    const action = positionals[1];
+    const argument = positionals.slice(2).join(' ');
+
+    // Handle project commands
+    if (command === 'project') {
+        if (action === 'add') {
+            await addProject(argument);
+            return;
+        }
+
+        if (action === 'list') {
+            await listProjects();
+            return;
+        }
+
+        console.error('Unknown project action.');
+        console.log('Available actions: add, list');
         process.exitCode = 1;
         return;
     }
