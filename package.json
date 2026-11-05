@@ -31,5 +31,10 @@
   "bugs": {
     "url": "https://github.com/marquise-ange/DevTrack-CLI/issues"
   },
-  "homepage": "https://github.com/marquise-ange/DevTrack-CLI#readme"
+  "homepage": "https://github.com/marquise-ange/DevTrack-CLI#readme",
+  "dependencies": {
+    "chalk": "^6.0.1",
+    "cli-table3": "^0.6.5",
+    "ora": "^10.0.0"
+  }
 }
