@@ -17,7 +17,7 @@ Developers often keep track of their work in scattered notes, browser tabs, or i
 - Dashboard with project and task statistics and a progress bar
 - Productivity report with project and task tables and a summary
 - Inspect any public GitHub repository (`owner/repo`)
-- Colored output, tables, spinners, and clear error messages
+- Colored output and tables in the dashboard and report, and clear error messages with exit codes for invalid input
 - Data saved locally in a JSON file
 
 ## Installation
@@ -229,7 +229,7 @@ Because the file lives in your home directory, your data is the same no matter w
 
 ## GitHub API
 
-The `repo inspect` command asks the public GitHub REST API for information about a repository and displays the name, description, main language, stars, forks, open issues, and last update time. It needs an internet connection and only works with public repositories. GitHub may limit how many requests you can make in a short time.
+The `repo inspect` command asks the public GitHub REST API (`https://api.github.com/repos/<owner>/<repo>`) for information about a repository and displays the name, description, main language, stars, forks, open issues, and last update time. It does not use a token. It needs an internet connection and only works with public repositories. GitHub may limit how many requests you can make in a short time.
 
 ## Project structure
 
@@ -283,6 +283,8 @@ This runs the Node.js built-in test runner (`node --test`) on the `test-*.js` fi
 - Projects and tasks cannot be renamed or edited yet.
 - Data is stored for one user on one computer; there is no sync.
 - `repo inspect` needs internet access, works only with public repositories, and may be limited by GitHub request limits.
+- When GitHub returns an error, `repo inspect` shows only the HTTP status (for example `GitHub API error: 404` for a repository that does not exist).
+- The spinner and error-handling helpers in `src/utils` are not used by every command yet.
 
 ## Future improvements
 
@@ -290,6 +292,8 @@ This runs the Node.js built-in test runner (`node --test`) on the `test-*.js` fi
 - Edit and rename projects and tasks
 - Task priorities, due dates, and filters
 - Optional GitHub token to avoid request limits
+- Friendlier GitHub error messages and a loading spinner for `repo inspect`
+- Use the formatter, spinner, and error helpers in all commands
 - Export the report to a file
 - More automated tests for the commands
 
